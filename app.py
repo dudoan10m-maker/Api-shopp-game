@@ -55,7 +55,6 @@ def image(image_id):
 
 @app.post('/api/accounts')
 def add_account():
-    if not admin_ok(): return jsonify(error='Chưa đăng nhập admin'),401
     name=request.form.get('name','').strip(); code=request.form.get('code','').strip(); desc=request.form.get('description','').strip(); status=request.form.get('status','available')
     try: price=int(request.form.get('price','0'))
     except ValueError: price=0
@@ -74,7 +73,6 @@ def add_account():
 
 @app.post('/api/accounts/<account_id>/status')
 def status(account_id):
-    if not admin_ok(): return jsonify(error='Chưa đăng nhập admin'),401
     s=(request.get_json(silent=True) or {}).get('status')
     if s not in ('available','sold'): return jsonify(error='Trạng thái không hợp lệ'),400
     with conn() as c:
@@ -83,7 +81,6 @@ def status(account_id):
 
 @app.delete('/api/accounts/<account_id>')
 def delete(account_id):
-    if not admin_ok(): return jsonify(error='Chưa đăng nhập admin'),401
     with conn() as c:
         with c.cursor() as cur: cur.execute('DELETE FROM accounts WHERE id=%s',(account_id,))
     return jsonify(ok=True)
