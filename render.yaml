@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: freefire-shop
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: freefire-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASS
+        sync: false
+
+databases:
+  - name: freefire-db
+    databaseName: freefire
+    user: freefire
+    plan: free
