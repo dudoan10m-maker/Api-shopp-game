@@ -2,8 +2,10 @@ import os, uuid
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask import Flask, request, jsonify, send_from_directory, session, abort, Response
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder='static')
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.secret_key = os.environ.get('SECRET_KEY', 'change-this-secret')
 app.config['MAX_CONTENT_LENGTH'] = 80 * 1024 * 1024
 DATABASE_URL = os.environ.get('DATABASE_URL')
